@@ -12,17 +12,18 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "https://alex-store-theta.vercel.app/",
+    origin: ["https://alex-store-theta.vercel.app", "http://localhost:3000"],
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })
 );
 app.use(express.json());
 
 // Rutas
-app.use("/routes/auth", authRoutes);
-app.use("/routes/products", productRoutes);
-app.use("/routes/cart", cartRoutes);
-app.use("/routes/checkout", checkoutRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+app.use("/api/checkout", checkoutRoutes);
 
 // Ruta para verificar el estado del servidor
 app.get("/routes/health", (req, res) => {

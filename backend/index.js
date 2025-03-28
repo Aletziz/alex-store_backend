@@ -12,26 +12,20 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? ["https://tu-frontend-url.vercel.app", "http://localhost:3000"]
-        : "http://localhost:3000",
+    origin: process.env.FRONTEND_URL || "https://alex-store-theta.vercel.app/",
     credentials: true,
   })
 );
 app.use(express.json());
 
-// Servir archivos estáticos (imágenes de productos)
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-
 // Rutas
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/checkout", checkoutRoutes);
+app.use("/routes/auth", authRoutes);
+app.use("/routes/products", productRoutes);
+app.use("/routes/cart", cartRoutes);
+app.use("/routes/checkout", checkoutRoutes);
 
 // Ruta para verificar el estado del servidor
-app.get("/api/health", (req, res) => {
+app.get("/routes/health", (req, res) => {
   res.json({
     status: "ok",
     message: "Alex Store API funcionando correctamente",
@@ -42,9 +36,9 @@ app.get("/api/health", (req, res) => {
 // Middleware de autenticación global
 app.use((req, res, next) => {
   const publicRoutes = [
-    "/api/auth/login",
-    "/api/auth/register",
-    "/api/products",
+    "/routes/auth/login",
+    "/routes/auth/register",
+    "/routes/products",
   ];
   if (publicRoutes.includes(req.path)) {
     return next();
